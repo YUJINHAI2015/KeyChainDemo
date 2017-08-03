@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		24188D741F322B0600DA5C0A /* KeychainPasswordItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24188D731F322B0600DA5C0A /* KeychainPasswordItem.swift */; };
+		24188D7C1F32BE0C00DA5C0A /* LocalAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24188D7B1F32BE0C00DA5C0A /* LocalAuthentication.swift */; };
 		2A2CDC9719FB441200BDF4E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2CDC9619FB441200BDF4E3 /* AppDelegate.swift */; };
 		2A2CDC9A19FB441200BDF4E3 /* TouchMeIn.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2A2CDC9819FB441200BDF4E3 /* TouchMeIn.xcdatamodeld */; };
 		2A2CDC9C19FB441200BDF4E3 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2CDC9B19FB441200BDF4E3 /* MasterViewController.swift */; };
@@ -21,6 +22,7 @@
 
 /* Begin PBXFileReference section */
 		24188D731F322B0600DA5C0A /* KeychainPasswordItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainPasswordItem.swift; sourceTree = "<group>"; };
+		24188D7B1F32BE0C00DA5C0A /* LocalAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalAuthentication.swift; sourceTree = "<group>"; };
 		2A2CDC9119FB441200BDF4E3 /* TouchMeIn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TouchMeIn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A2CDC9519FB441200BDF4E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2A2CDC9619FB441200BDF4E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 				2A94F6E519FE7D31007CED2D /* Note.swift */,
 				2AC21FA01A005A88003FD06F /* LoginViewController.swift */,
 				24188D731F322B0600DA5C0A /* KeychainPasswordItem.swift */,
+				24188D7B1F32BE0C00DA5C0A /* LocalAuthentication.swift */,
 				2A2CDC9F19FB441200BDF4E3 /* Main.storyboard */,
 				2A2CDCA219FB441200BDF4E3 /* Images.xcassets */,
 				2A2CDCA419FB441200BDF4E3 /* LaunchScreen.xib */,
@@ -167,6 +170,7 @@
 				2A2CDC9719FB441200BDF4E3 /* AppDelegate.swift in Sources */,
 				2A2CDC9C19FB441200BDF4E3 /* MasterViewController.swift in Sources */,
 				2A2CDC9E19FB441200BDF4E3 /* DetailViewController.swift in Sources */,
+				24188D7C1F32BE0C00DA5C0A /* LocalAuthentication.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "B83A9737F5202E36A4F60C4386A4718EC0063A98",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "B83A9737F5202E36A4F60C4386A4718EC0063A98" : 9223372036854775807,
+    "91CB801D32B6CF841A710841F0F7DA70B25E776F" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "44A7A072-C472-4F03-86B3-691A203C8695",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "B83A9737F5202E36A4F60C4386A4718EC0063A98" : "keyChainDemo\/",
+    "91CB801D32B6CF841A710841F0F7DA70B25E776F" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "TouchMeIn",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "TouchMeIn.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/YUJINHAI2015\/WidgetDemo.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "91CB801D32B6CF841A710841F0F7DA70B25E776F"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/YUJINHAI2015\/KeyChainDemo",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B83A9737F5202E36A4F60C4386A4718EC0063A98"
+    }
+  ]
+}

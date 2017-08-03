@@ -1,24 +1,24 @@
 /*
-* Copyright (c) 2017 Razeware LLC
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in
-* all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-* THE SOFTWARE.
-*/
+ * Copyright (c) 2017 Razeware LLC
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 import UIKit
 import CoreData
@@ -31,8 +31,8 @@ struct KeychainConfiguration {
 
 
 class LoginViewController: UIViewController {
-  
-  
+    
+    
     var managedObjectContext: NSManagedObjectContext?
     
     var passwordItems: [KeychainPasswordItem] = []
@@ -40,108 +40,135 @@ class LoginViewController: UIViewController {
     let createLoginButtonTag = 0 // 创建
     let loginButtonTag = 1 // 登录
     
+    let touchMe = TouchIDAuth() // touch
+    
     @IBOutlet weak var loginButton: UIButton!
-
-  @IBOutlet weak var usernameTextField: UITextField!
-  @IBOutlet weak var passwordTextField: UITextField!
-  @IBOutlet weak var createInfoLabel: UILabel!  
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    // 1
-    let hasLogin = UserDefaults.standard.bool(forKey: "hasLoginKey")
     
-    // 2
-    if hasLogin {
-        loginButton.setTitle("Login", for: .normal)
-        loginButton.tag = loginButtonTag
-        createInfoLabel.isHidden = true
-    } else {
-        loginButton.setTitle("Create", for: .normal)
-        loginButton.tag = createLoginButtonTag
-        createInfoLabel.isHidden = false
+    @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var createInfoLabel: UILabel!
+    @IBOutlet weak var touchIDButton: UIButton!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // 1
+        let hasLogin = UserDefaults.standard.bool(forKey: "hasLoginKey")
+        
+        // 2
+        if hasLogin {
+            loginButton.setTitle("Login", for: .normal)
+            loginButton.tag = loginButtonTag
+            createInfoLabel.isHidden = true
+        } else {
+            loginButton.setTitle("Create", for: .normal)
+            loginButton.tag = createLoginButtonTag
+            createInfoLabel.isHidden = false
+        }
+        
+        // 3
+        if let storedUsername = UserDefaults.standard.value(forKey: "username") as? String {
+            usernameTextField.text = storedUsername
+        }
+        
+        // is can touch me
+        touchIDButton.isHidden = !touchMe.canEvaluatePolicy()
+        
+        
     }
     
-    // 3
-    if let storedUsername = UserDefaults.standard.value(forKey: "username") as? String {
-        usernameTextField.text = storedUsername
-    }
-
-  }
-  
-  // MARK: - Action for checking username/password
-  @IBAction func loginAction(_ sender: AnyObject) {
-    
-    // 1
-    // Check that text has been entered into both the username and password fields.
-    // 是否有输入username password
-    guard
-        let newAccountName = usernameTextField.text,
-        let newPassword = passwordTextField.text,
-        !newAccountName.isEmpty &&
-            !newPassword.isEmpty else {
+    @IBAction func touchIDLoginAction(_ sender: UIButton) {
+        // 1
+        touchMe.authenticateUser() { message in
+            
+            // 2
+            if let message = message {
+                // if the completion is not nil show an alert
+                let alertView = UIAlertController(title: "Error",
+                                                  message: message,
+                                                  preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "Darn!", style: .default)
+                alertView.addAction(okAction)
+                self.present(alertView, animated: true)
                 
+            } else {
+                // 3
+                self.performSegue(withIdentifier: "dismissLogin", sender: self)
+            }
+        }
+    }
+    // MARK: - Action for checking username/password
+    @IBAction func loginAction(_ sender: AnyObject) {
+        
+        // 1
+        // Check that text has been entered into both the username and password fields.
+        // 是否有输入username password
+        guard
+            let newAccountName = usernameTextField.text,
+            let newPassword = passwordTextField.text,
+            !newAccountName.isEmpty &&
+                !newPassword.isEmpty else {
+                    
+                    let alertView = UIAlertController(title: "Login Problem",
+                                                      message: "Wrong username or password.",
+                                                      preferredStyle:. alert)
+                    let okAction = UIAlertAction(title: "Foiled Again!", style: .default, handler: nil)
+                    alertView.addAction(okAction)
+                    present(alertView, animated: true, completion: nil)
+                    return
+        }
+        
+        // 2
+        usernameTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
+        
+        // 3 注册
+        if sender.tag == createLoginButtonTag {
+            
+            // 4 是否登录过，没有先保存username
+            let hasLoginKey = UserDefaults.standard.bool(forKey: "hasLoginKey")
+            if !hasLoginKey {
+                UserDefaults.standard.setValue(usernameTextField.text, forKey: "username")
+            }
+            
+            // 5
+            do {
+                
+                // This is a new account, create a new keychain item with the account name.
+                // 这里只是创建一个usernameItem
+                let passwordItem = KeychainPasswordItem(service: KeychainConfiguration.serviceName,
+                                                        account: newAccountName,
+                                                        accessGroup: KeychainConfiguration.accessGroup)
+                
+                // Save the password for the new item.
+                try passwordItem.savePassword(newPassword)
+            } catch {
+                fatalError("Error updating keychain - \(error)")
+            }
+            
+            // 6
+            UserDefaults.standard.set(true, forKey: "hasLoginKey")
+            loginButton.tag = loginButtonTag
+            
+            performSegue(withIdentifier: "dismissLogin", sender: self)
+            
+        }
+            // 登录
+        else if sender.tag == loginButtonTag {
+            
+            // 7
+            if checkLogin(username: usernameTextField.text!, password: passwordTextField.text!) {
+                performSegue(withIdentifier: "dismissLogin", sender: self)
+            } else {
+                // 8
                 let alertView = UIAlertController(title: "Login Problem",
                                                   message: "Wrong username or password.",
-                                                  preferredStyle:. alert)
-                let okAction = UIAlertAction(title: "Foiled Again!", style: .default, handler: nil)
+                                                  preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "Foiled Again!", style: .default)
                 alertView.addAction(okAction)
                 present(alertView, animated: true, completion: nil)
-                return
-    }
-    
-    // 2
-    usernameTextField.resignFirstResponder()
-    passwordTextField.resignFirstResponder()
-    
-    // 3 注册
-    if sender.tag == createLoginButtonTag {
-        
-        // 4 是否登录过，没有先保存username
-        let hasLoginKey = UserDefaults.standard.bool(forKey: "hasLoginKey")
-        if !hasLoginKey {
-            UserDefaults.standard.setValue(usernameTextField.text, forKey: "username")
-        }
-        
-        // 5
-        do {
-            
-            // This is a new account, create a new keychain item with the account name.
-            // 这里只是创建一个usernameItem
-            let passwordItem = KeychainPasswordItem(service: KeychainConfiguration.serviceName,
-                                                    account: newAccountName,
-                                                    accessGroup: KeychainConfiguration.accessGroup)
-            
-            // Save the password for the new item.
-            try passwordItem.savePassword(newPassword)
-        } catch {
-            fatalError("Error updating keychain - \(error)")
-        }
-        
-        // 6
-        UserDefaults.standard.set(true, forKey: "hasLoginKey")
-        loginButton.tag = loginButtonTag
-        
-        performSegue(withIdentifier: "dismissLogin", sender: self)
-        
-    }
-        // 登录
-    else if sender.tag == loginButtonTag {
-        
-        // 7
-        if checkLogin(username: usernameTextField.text!, password: passwordTextField.text!) {
-            performSegue(withIdentifier: "dismissLogin", sender: self)
-        } else {
-            // 8
-            let alertView = UIAlertController(title: "Login Problem",
-                                              message: "Wrong username or password.",
-                                              preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "Foiled Again!", style: .default)
-            alertView.addAction(okAction)
-            present(alertView, animated: true, completion: nil)
+            }
         }
     }
-  }
     //passwords should NEVER be stored directly in the app.
     func checkLogin(username: String, password: String) -> Bool {
         guard username == UserDefaults.standard.value(forKey: "username") as? String else {
@@ -161,5 +188,5 @@ class LoginViewController: UIViewController {
         
         return false
     }
-
+    
 }
